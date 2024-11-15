@@ -9,39 +9,25 @@
 /// This example shows a basic packet logger using libpnet
 extern crate pnet;
 
-use pnet::datalink::{self, NetworkInterface};
-use pnet::packet::ethernet::{EtherTypes, EthernetPacket, MutableEthernetPacket};
-use pnet::packet::ipv4::Ipv4Packet;
-use pnet::packet::Packet;
-use pnet::util::MacAddr;
+use pnet::datalink;
 
 use std::env;
 use std::io::{self, Write};
-use std::net::IpAddr;
 use std::process;
 
-fn handle_ipv4_packet(interface_name: &str, ethernet: &EthernetPacket) {
-    let header = Ipv4Packet::new(ethernet.payload());
-    if let Some(header) = header {
-        println!(
-            "IPv4 Packet: interface: {}, source: {}, destination: {}, payload: {:?}",
-            interface_name,
-            IpAddr::V4(header.get_source()),
-            IpAddr::V4(header.get_destination()),
-            header.payload()
-        )
-    } else {
-        println!("[{}]: Malformed IPv4 Packet", interface_name);
-    }
+mod capture;
+mod rules;
+use capture::handle_ethernet_frame;
+
+mod prelude {
+    pub use pnet::datalink::NetworkInterface;
+    pub use pnet::packet::ethernet::{EtherTypes, EthernetPacket};
+    pub use pnet::packet::ipv4::Ipv4Packet;
+    pub use pnet::packet::Packet;
+    pub use std::net::IpAddr;
 }
 
-fn handle_ethernet_frame(interface: &NetworkInterface, ethernet: &EthernetPacket) {
-    let interface_name = &interface.name[..];
-    match ethernet.get_ethertype() {
-        EtherTypes::Ipv4 => handle_ipv4_packet(interface_name, ethernet),
-        _ => (),
-    }
-}
+use prelude::*;
 
 fn main() {
     use pnet::datalink::Channel::Ethernet;
@@ -71,48 +57,8 @@ fn main() {
     };
 
     loop {
-        let mut buf: [u8; 1600] = [0u8; 1600];
-        let mut fake_ethernet_frame = MutableEthernetPacket::new(&mut buf[..]).unwrap();
         match rx.next() {
             Ok(packet) => {
-                let payload_offset;
-                if cfg!(any(
-                    target_os = "macos",
-                    target_os = "ios",
-                    target_os = "tvos"
-                )) && interface.is_up()
-                    && !interface.is_broadcast()
-                    && ((!interface.is_loopback() && interface.is_point_to_point())
-                        || interface.is_loopback())
-                {
-                    if interface.is_loopback() {
-                        // The pnet code for BPF loopback adds a zero'd out Ethernet header
-                        payload_offset = 14;
-                    } else {
-                        // Maybe is TUN interface
-                        payload_offset = 0;
-                    }
-                    if packet.len() > payload_offset {
-                        let version = Ipv4Packet::new(&packet[payload_offset..])
-                            .unwrap()
-                            .get_version();
-                        if version == 4 {
-                            fake_ethernet_frame.set_destination(MacAddr(0, 0, 0, 0, 0, 0));
-                            fake_ethernet_frame.set_source(MacAddr(0, 0, 0, 0, 0, 0));
-                            fake_ethernet_frame.set_ethertype(EtherTypes::Ipv4);
-                            fake_ethernet_frame.set_payload(&packet[payload_offset..]);
-                            handle_ethernet_frame(&interface, &fake_ethernet_frame.to_immutable());
-                            continue;
-                        } else if version == 6 {
-                            fake_ethernet_frame.set_destination(MacAddr(0, 0, 0, 0, 0, 0));
-                            fake_ethernet_frame.set_source(MacAddr(0, 0, 0, 0, 0, 0));
-                            fake_ethernet_frame.set_ethertype(EtherTypes::Ipv6);
-                            fake_ethernet_frame.set_payload(&packet[payload_offset..]);
-                            handle_ethernet_frame(&interface, &fake_ethernet_frame.to_immutable());
-                            continue;
-                        }
-                    }
-                }
                 handle_ethernet_frame(&interface, &EthernetPacket::new(packet).unwrap());
             }
             Err(e) => panic!("packetdump: unable to receive packet: {}", e),
