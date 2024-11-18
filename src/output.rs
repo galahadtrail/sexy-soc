@@ -20,6 +20,6 @@ pub fn print_hello_message() {
 
     for part in hello_world_string {
         println!("{}", part.truecolor(193, 251, 222).italic());
-        thread::sleep(Duration::from_millis(200));
+        thread::sleep(Duration::from_millis(300));
     }
 }
