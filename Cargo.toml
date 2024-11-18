@@ -4,8 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-etherparse = "0.16.0"
-pcap = "2.2.0"
+colored = "2"
 
 [dependencies.pnet]
 version = "0.35.0"
