@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(serde_derive::Deserialize, serde_derive::Serialize)]
 struct Rule {
     source: Ipv4Addr,
     destination: Ipv4Addr,
@@ -12,4 +13,5 @@ impl Rule {
             destination: dest,
         }
     }
+    pub fn read_from_file(rules: Vec<Rule>) {}
 }
