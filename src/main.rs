@@ -11,6 +11,7 @@ mod prelude {
     pub use pnet::packet::ipv4::Ipv4Packet;
     pub use pnet::packet::Packet;
     pub use std::net::IpAddr;
+    pub use std::net::Ipv4Addr;
 }
 
 fn main() {

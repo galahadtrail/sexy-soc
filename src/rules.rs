@@ -1,6 +1,15 @@
 use crate::prelude::*;
 
 struct Rule {
-    source: std::net::Ipv4Addr,
-    destination: std::net::Ipv4Addr,
+    source: Ipv4Addr,
+    destination: Ipv4Addr,
+}
+
+impl Rule {
+    pub fn new(sourc: Ipv4Addr, dest: Ipv4Addr) -> Rule {
+        Rule {
+            source: sourc,
+            destination: dest,
+        }
+    }
 }
