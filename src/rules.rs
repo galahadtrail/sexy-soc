@@ -1,6 +1,8 @@
+use core::fmt;
+
 use crate::prelude::*;
 
-#[derive(serde_derive::Deserialize, serde_derive::Serialize)]
+#[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug)]
 pub(crate) struct Rule {
     source: Ipv4Addr,
     destination: Ipv4Addr,
@@ -12,6 +14,16 @@ impl Rule {
             source: sourc,
             destination: dest,
         }
+    }
+}
+
+impl fmt::Display for Rule {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "(source: {}, destination: {})",
+            self.source, self.destination
+        )
     }
 }
 
@@ -27,4 +39,17 @@ pub fn write_to_file(rules: Vec<Rule>) -> std::io::Result<()> {
     writer.flush()?;
 
     Ok(())
+}
+
+pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
+    let file = File::open("src/rules/rules_ipv4.txt")?;
+    let reader = BufReader::new(file);
+    let rules_raw: Vec<String> = serde_json::from_reader(reader)?;
+
+    let rules_unjsoned: Vec<Rule> = rules_raw
+        .iter()
+        .map(|rule| serde_json::from_str(&rule).unwrap())
+        .collect();
+
+    Ok(rules_unjsoned)
 }

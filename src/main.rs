@@ -4,7 +4,7 @@ mod rules;
 
 use capture::traffic_interception;
 use output::print_hello_message;
-use rules::{write_to_file, Rule};
+use rules::{read_from_file, write_to_file, Rule};
 
 mod prelude {
     pub use pnet::datalink::NetworkInterface;
@@ -12,7 +12,7 @@ mod prelude {
     pub use pnet::packet::ipv4::Ipv4Packet;
     pub use pnet::packet::Packet;
     pub use std::fs::File;
-    pub use std::io::{BufWriter, Write};
+    pub use std::io::{BufReader, BufWriter, Write};
     pub use std::net::IpAddr;
     pub use std::net::Ipv4Addr;
 }
@@ -26,5 +26,10 @@ fn main() {
         "189.23.134.1".parse().unwrap(),
     );
     let vec = vec![rls, rls1];
-    let _ = write_to_file(vec);
+    //let _ = write_to_file(vec);
+
+    let vct = read_from_file().unwrap();
+    for vc in vct.iter() {
+        println!("{}", vc);
+    }
 }
