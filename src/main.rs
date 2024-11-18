@@ -7,19 +7,10 @@
 // except according to those terms.
 
 /// This example shows a basic packet logger using libpnet
-extern crate pnet;
-
-use pnet::datalink;
-
-use std::env;
-use std::io::{self, Write};
-use std::process;
-
 mod capture;
 mod output;
 mod rules;
 
-use capture::handle_ethernet_frame;
 use output::print_hello_message;
 
 mod prelude {
@@ -30,42 +21,6 @@ mod prelude {
     pub use std::net::IpAddr;
 }
 
-use prelude::*;
-
 fn main() {
-    use pnet::datalink::Channel::Ethernet;
     print_hello_message();
-
-    let iface_name = match env::args().nth(1) {
-        Some(n) => n,
-        None => {
-            writeln!(io::stderr(), "USAGE: packetdump <NETWORK INTERFACE>").unwrap();
-            process::exit(1);
-        }
-    };
-    let interface_names_match = |iface: &NetworkInterface| iface.name == iface_name;
-
-    // Find the network interface with the provided name
-    let interfaces = datalink::interfaces();
-    let interface = interfaces
-        .into_iter()
-        .filter(interface_names_match)
-        .next()
-        .unwrap_or_else(|| panic!("No such network interface: {}", iface_name));
-
-    // Create a channel to receive on
-    let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
-        Ok(Ethernet(tx, rx)) => (tx, rx),
-        Ok(_) => panic!("packetdump: unhandled channel type"),
-        Err(e) => panic!("packetdump: unable to create channel: {}", e),
-    };
-
-    loop {
-        match rx.next() {
-            Ok(packet) => {
-                handle_ethernet_frame(&interface, &EthernetPacket::new(packet).unwrap());
-            }
-            Err(e) => panic!("packetdump: unable to receive packet: {}", e),
-        }
-    }
 }
