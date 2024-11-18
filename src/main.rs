@@ -16,8 +16,11 @@ use std::io::{self, Write};
 use std::process;
 
 mod capture;
+mod output;
 mod rules;
+
 use capture::handle_ethernet_frame;
+use output::print_hello_message;
 
 mod prelude {
     pub use pnet::datalink::NetworkInterface;
@@ -31,6 +34,7 @@ use prelude::*;
 
 fn main() {
     use pnet::datalink::Channel::Ethernet;
+    print_hello_message();
 
     let iface_name = match env::args().nth(1) {
         Some(n) => n,
