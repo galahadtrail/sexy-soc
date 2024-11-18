@@ -13,5 +13,17 @@ impl Rule {
             destination: dest,
         }
     }
-    pub fn read_from_file(rules: Vec<Rule>) {}
+    pub fn write_to_file(rules: Vec<Rule>) -> std::io::Result<()> {
+        let rules_jsoned: Vec<String> = rules
+            .iter()
+            .map(|rule| serde_json::to_string(rule).unwrap())
+            .collect();
+
+        let file = File::create("rules/rules_ipv4.txt")?;
+        let mut writer = BufWriter::new(file);
+        serde_json::to_writer(&mut writer, &rules_jsoned)?;
+        writer.flush()?;
+
+        Ok(())
+    }
 }
