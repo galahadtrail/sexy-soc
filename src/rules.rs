@@ -2,7 +2,7 @@ use core::fmt;
 
 use crate::prelude::*;
 
-#[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug)]
+#[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug, PartialEq, Eq)]
 pub(crate) struct Rule {
     source: Ipv4Addr,
     destination: Ipv4Addr,
@@ -14,6 +14,13 @@ impl Rule {
             source: sourc,
             destination: dest,
         }
+    }
+
+    pub fn match_with(&self, another: &Rule) -> bool {
+        if self == another {
+            return true;
+        }
+        false
     }
 }
 
