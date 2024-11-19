@@ -64,3 +64,7 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
 pub fn add_rule(rules: &mut Vec<Rule>, new_rule: &Rule) {
     rules.push(new_rule.clone());
 }
+
+pub fn del_rule(rules: &mut Vec<Rule>, deprecated_rule: &Rule) {
+    rules.retain(|elem| elem != deprecated_rule);
+}
