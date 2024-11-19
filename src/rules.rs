@@ -2,7 +2,7 @@ use core::fmt;
 
 use crate::prelude::*;
 
-#[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug, PartialEq, Eq)]
+#[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug, PartialEq, Eq, Clone)]
 pub(crate) struct Rule {
     source: Ipv4Addr,
     destination: Ipv4Addr,
@@ -59,4 +59,8 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
         .collect();
 
     Ok(rules_unjsoned)
+}
+
+pub fn add_rule(rules: &mut Vec<Rule>, new_rule: &Rule) {
+    rules.push(new_rule.clone());
 }
