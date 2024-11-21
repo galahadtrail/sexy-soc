@@ -1,3 +1,4 @@
+mod authorization;
 mod capture;
 mod output;
 mod rules;
@@ -12,6 +13,7 @@ mod prelude {
     pub use pnet::packet::ipv4::Ipv4Packet;
     pub use pnet::packet::Packet;
     pub use std::fs::File;
+    pub use std::io;
     pub use std::io::{BufReader, BufWriter, Write};
     pub use std::net::IpAddr;
     pub use std::net::Ipv4Addr;
