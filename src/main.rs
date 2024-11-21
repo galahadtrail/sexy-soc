@@ -16,7 +16,7 @@ mod prelude {
     pub use pnet::packet::Packet;
     pub use std::fs::File;
     pub use std::io;
-    pub use std::io::{BufReader, BufWriter, Write};
+    pub use std::io::{BufRead, BufReader, BufWriter, Error, Write};
     pub use std::net::IpAddr;
     pub use std::net::Ipv4Addr;
 }
