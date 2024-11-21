@@ -2,9 +2,11 @@ use crate::prelude::*;
 use hex;
 use sha3::{Digest, Sha3_256};
 
+#[derive(Debug)]
 pub enum Privileges {
     Admin,
     Viewer,
+    Slave,
 }
 
 fn gimme_creds(name: &String) -> Result<String, Error> {
@@ -58,5 +60,10 @@ pub fn authorize() -> Privileges {
     let password = hasher.finalize();
     let password = hex::encode(password);
 
-    Privileges::Admin
+    if res_creds[1] == password && name == "admin" {
+        return Privileges::Admin;
+    } else if res_creds[1] == password {
+        return Privileges::Viewer;
+    }
+    Privileges::Slave
 }

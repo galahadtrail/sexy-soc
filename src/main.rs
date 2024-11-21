@@ -23,6 +23,7 @@ mod prelude {
 
 fn main() {
     print_hello_message();
-    authorize();
+    let privileges = authorize();
+    println!("{:?}", privileges);
     //traffic_interception();
 }
