@@ -35,6 +35,20 @@ pub fn authorize() -> Privileges {
         Ok(res) => res,
         Err(e) => panic!("{}", e),
     };
+    let s = String::from("Not found that username");
+
+    let res_creds: Vec<String> = match creds {
+        s => {
+            panic!("Not found that username, terminate..");
+        }
+        _ => {
+            let ind = creds.find("@").unwrap();
+            let before = &creds[..ind];
+            let after = &creds[ind + 1..];
+
+            vec![String::from(before), String::from(after)]
+        }
+    };
 
     let write = "Enter your password".truecolor(193, 251, 222).on_purple();
     println!("{}", write);
