@@ -1,4 +1,4 @@
-use colored::*;
+use crate::prelude::*;
 use std::{thread, time::Duration};
 
 pub fn print_hello_message() {
