@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Menu {
     description: String,
 }
@@ -9,31 +10,32 @@ impl Menu {
         }
     }
 
-    pub fn to_traffic_interception(self) -> TrafficInterception {
+    pub fn to_traffic_interception(&self) -> TrafficInterception {
         TrafficInterception {
             description: String::from("Here you will see network intrusions"),
         }
     }
 
-    pub fn to_computers_information(self) -> ComputersInformation {
+    pub fn to_computers_information(&self) -> ComputersInformation {
         ComputersInformation {
             description: String::from("Here you will see agents intrusions"),
         }
     }
 
-    pub fn to_network_rules_changing(self) -> NetworkRulesChanging {
+    pub fn to_network_rules_changing(&self) -> NetworkRulesChanging {
         NetworkRulesChanging {
             description: String::from("Here you change rules for nets"),
         }
     }
 
-    pub fn to_computer_rules_changing(self) -> ComputerRulesChanging {
+    pub fn to_computer_rules_changing(&self) -> ComputerRulesChanging {
         ComputerRulesChanging {
             description: String::from("Here you change rules for comps"),
         }
     }
 }
 
+#[derive(Debug)]
 pub struct TrafficInterception {
     description: String,
 }
@@ -44,12 +46,14 @@ impl TrafficInterception {
             description: String::from("Here you will see network intrusions"),
         }
     }
-    pub fn to_menu(self) -> Menu {
+    pub fn to_menu(&self) -> Menu {
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
     }
 }
+
+#[derive(Debug)]
 pub struct ComputersInformation {
     description: String,
 }
@@ -60,13 +64,14 @@ impl ComputersInformation {
             description: String::from("Here you will see agents intrusions"),
         }
     }
-    pub fn to_menu(self) -> Menu {
+    pub fn to_menu(&self) -> Menu {
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
     }
 }
 
+#[derive(Debug)]
 pub struct NetworkRulesChanging {
     description: String,
 }
@@ -78,12 +83,14 @@ impl NetworkRulesChanging {
         }
     }
 
-    pub fn to_menu(self) -> Menu {
+    pub fn to_menu(&self) -> Menu {
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
     }
 }
+
+#[derive(Debug)]
 pub struct ComputerRulesChanging {
     description: String,
 }
@@ -95,7 +102,7 @@ impl ComputerRulesChanging {
         }
     }
 
-    pub fn to_menu(self) -> Menu {
+    pub fn to_menu(&self) -> Menu {
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }

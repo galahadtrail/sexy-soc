@@ -29,5 +29,9 @@ fn main() {
     print_hello_message();
     let privileges = authorize();
     println!("{:?}", privileges);
+    let mut goodmorning = Menu::new();
+    goodmorning.to_computer_rules_changing();
+    let res = goodmorning.to_network_rules_changing();
+    println!("{:?}", res);
     //traffic_interception();
 }
