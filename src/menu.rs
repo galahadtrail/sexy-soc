@@ -11,7 +11,25 @@ impl Menu {
 
     fn to_traffic_interception(self) -> TrafficInterception {
         TrafficInterception {
-            description: String::from("Here you will see network inrusions"),
+            description: String::from("Here you will see network intrusions"),
+        }
+    }
+
+    fn to_computers_information(self) -> ComputersInformation {
+        ComputersInformation {
+            description: String::from("Here you will see agents intrusions"),
+        }
+    }
+
+    fn to_network_rules_changing(self) -> NetworkRulesChanging {
+        NetworkRulesChanging {
+            description: String::from("Here you change rules for nets"),
+        }
+    }
+
+    fn to_computer_rules_changing(self) -> ComputerRulesChanging {
+        ComputerRulesChanging {
+            description: String::from("Here you change rules for comps"),
         }
     }
 }
@@ -24,6 +42,10 @@ struct ComputersInformation {
     description: String,
 }
 
-struct RulesChanging {
+struct NetworkRulesChanging {
+    description: String,
+}
+
+struct ComputerRulesChanging {
     description: String,
 }
