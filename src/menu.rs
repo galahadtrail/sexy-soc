@@ -5,30 +5,35 @@ pub struct Menu {
 
 impl Menu {
     pub fn new() -> Self {
+        println!("This is menu. You can pick what you want to do here.");
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
     }
 
     pub fn to_traffic_interception(&self) -> TrafficInterception {
+        println!("Here you will see network intrusions");
         TrafficInterception {
             description: String::from("Here you will see network intrusions"),
         }
     }
 
     pub fn to_computers_information(&self) -> ComputersInformation {
+        println!("Here you will see agents intrusions");
         ComputersInformation {
             description: String::from("Here you will see agents intrusions"),
         }
     }
 
     pub fn to_network_rules_changing(&self) -> NetworkRulesChanging {
+        println!("Here you change rules for nets");
         NetworkRulesChanging {
             description: String::from("Here you change rules for nets"),
         }
     }
 
     pub fn to_computer_rules_changing(&self) -> ComputerRulesChanging {
+        println!("Here you change rules for comps");
         ComputerRulesChanging {
             description: String::from("Here you change rules for comps"),
         }
@@ -47,6 +52,7 @@ impl TrafficInterception {
         }
     }
     pub fn to_menu(&self) -> Menu {
+        println!("This is menu. You can pick what you want to do here.");
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
@@ -65,6 +71,7 @@ impl ComputersInformation {
         }
     }
     pub fn to_menu(&self) -> Menu {
+        println!("This is menu. You can pick what you want to do here.");
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
@@ -84,6 +91,7 @@ impl NetworkRulesChanging {
     }
 
     pub fn to_menu(&self) -> Menu {
+        println!("This is menu. You can pick what you want to do here.");
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
@@ -103,6 +111,7 @@ impl ComputerRulesChanging {
     }
 
     pub fn to_menu(&self) -> Menu {
+        println!("This is menu. You can pick what you want to do here.");
         Menu {
             description: String::from("This is menu. You can pick what you want to do here."),
         }
