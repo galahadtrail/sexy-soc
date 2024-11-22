@@ -6,6 +6,9 @@ mod rules;
 
 use authorization::authorize;
 use capture::traffic_interception;
+use menu::{
+    ComputerRulesChanging, ComputersInformation, Menu, NetworkRulesChanging, TrafficInterception,
+};
 use output::print_hello_message;
 use rules::{read_from_file, write_to_file, Rule};
 
