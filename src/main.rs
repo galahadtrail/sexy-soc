@@ -31,17 +31,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut welcome = Statement::Menu;
 
-    println!("Please tell me what you want to do\n\n1. Traffic Interception\n2. Computer Information\n3. Network Rules Changing\n4. Computer Rules Changing");
-    let mut option = String::new();
-    let _ = io::stdin().read_line(&mut option);
+    loop {
+        println!("Please tell me what you want to do\n\n1. Traffic Interception\n2. Computer Information\n3. Network Rules Changing\n4. Computer Rules Changing");
+        let mut option = String::new();
+        let _ = io::stdin().read_line(&mut option);
 
-    welcome = match option.as_str() {
-        "1" => Statement::TrafficInterception,
-        "2" => Statement::ComputerInformation,
-        "3" => Statement::NetworkRulesChanging,
-        "4" => Statement::ComputerRulesChanging,
-        _ => Statement::Menu,
-    };
+        welcome = match option.as_str() {
+            "1" => Statement::TrafficInterception,
+            "2" => Statement::ComputerInformation,
+            "3" => Statement::NetworkRulesChanging,
+            "4" => Statement::ComputerRulesChanging,
+            _ => Statement::Menu,
+        };
+
+        match welcome {
+            Statement::Menu => continue,
+            Statement::TrafficInterception => println!("1"),
+            Statement::ComputerInformation => println!("2"),
+            Statement::NetworkRulesChanging => println!("3"),
+            Statement::ComputerRulesChanging => println!("4"),
+        }
+    }
+
     //traffic_interception();
     Ok(())
 }
