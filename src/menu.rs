@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Menu {
     description: String,
 }
@@ -40,7 +40,7 @@ impl Menu {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct TrafficInterception {
     description: String,
 }
@@ -59,7 +59,7 @@ impl TrafficInterception {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct ComputersInformation {
     description: String,
 }
@@ -78,7 +78,7 @@ impl ComputersInformation {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct NetworkRulesChanging {
     description: String,
 }
@@ -98,7 +98,7 @@ impl NetworkRulesChanging {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct ComputerRulesChanging {
     description: String,
 }
