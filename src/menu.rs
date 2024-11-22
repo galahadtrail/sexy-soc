@@ -1,0 +1,6 @@
+struct Menu{
+
+};
+struct TrafficInterception{
+
+};
