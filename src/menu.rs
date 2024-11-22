@@ -38,6 +38,18 @@ struct TrafficInterception {
     description: String,
 }
 
+impl TrafficInterception {
+    fn new() -> Self {
+        TrafficInterception {
+            description: String::from("Here you will see network intrusions"),
+        }
+    }
+    fn to_menu(self) -> Menu {
+        Menu {
+            description: String::from("Here you will see network intrusions"),
+        }
+    }
+}
 struct ComputersInformation {
     description: String,
 }
