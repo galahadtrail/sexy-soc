@@ -25,13 +25,13 @@ mod prelude {
     pub use std::net::Ipv4Addr;
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_hello_message();
-    let privileges = authorize();
-    println!("{:?}", privileges);
-    let mut goodmorning = Menu::new();
-    goodmorning.to_computer_rules_changing();
-    let res = goodmorning.to_network_rules_changing();
-    println!("{:?}", res);
+
+    let privileges = authorize()?;
+
+    let mut welcome = Menu::new();
+
     //traffic_interception();
+    Ok(())
 }
