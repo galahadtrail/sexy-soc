@@ -1,11 +1,25 @@
 use crate::prelude::*;
 extern crate pnet;
 
+use crate::rules::Rule;
 use pnet::datalink;
 
 use std::env;
 use std::io::{self, Write};
 use std::process;
+
+fn gimme_alert_if_it_here<'a>(
+    some_packet_rule: &'a Rule,
+    rules: &'a mut Vec<Rule>,
+    header: &'a Ipv4Packet<'a>,
+) -> Option<&'a Ipv4Packet<'a>> {
+    for rule in rules {
+        if rule == some_packet_rule {
+            return Some(header);
+        }
+    }
+    None
+}
 
 fn handle_ipv4_packet(interface_name: &str, ethernet: &EthernetPacket) {
     let header = Ipv4Packet::new(ethernet.payload());
