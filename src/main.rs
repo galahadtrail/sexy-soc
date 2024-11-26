@@ -6,7 +6,7 @@ mod rules;
 
 use authorization::authorize;
 use capture::traffic_interception;
-use menu::{menu, Statement};
+use menu::infinite_action_loop;
 use output::print_hello_message;
 use prelude::*;
 use rules::{read_from_file, write_to_file, Rule};
@@ -29,18 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let privileges = authorize()?;
 
-    loop {
-        let mut welcome = Statement::Menu;
-        let mut welcome = menu(welcome);
-
-        match welcome {
-            Statement::Menu => continue,
-            Statement::TrafficInterception => println!("1"),
-            Statement::ComputerInformation => println!("2"),
-            Statement::NetworkRulesChanging => println!("3"),
-            Statement::ComputerRulesChanging => println!("4"),
-        }
-    }
+    infinite_action_loop(&privileges);
 
     //traffic_interception();
     Ok(())
