@@ -4,8 +4,8 @@ use crate::prelude::*;
 
 #[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug, PartialEq, Eq, Clone)]
 pub(crate) struct Rule {
-    source: Ipv4Addr,
-    destination: Ipv4Addr,
+    pub source: Ipv4Addr,
+    pub destination: Ipv4Addr,
 }
 
 impl Rule {

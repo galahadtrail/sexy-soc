@@ -21,7 +21,12 @@ fn gimme_alert_if_it_here<'a>(
     None
 }
 
-fn handle_ipv4_packet(interface_name: &str, ethernet: &EthernetPacket) {
+fn handle_ipv4_packet(
+    interface_name: &str,
+    ethernet: &EthernetPacket,
+    rules: &mut Vec<Rule>,
+    alerts: &mut Vec<u8>,
+) {
     let header = Ipv4Packet::new(ethernet.payload());
     if let Some(header) = header {
         println!(
@@ -30,21 +35,34 @@ fn handle_ipv4_packet(interface_name: &str, ethernet: &EthernetPacket) {
             IpAddr::V4(header.get_source()),
             IpAddr::V4(header.get_destination()),
             header.payload()
-        )
-    } else {
-        println!("[{}]: Malformed IPv4 Packet", interface_name);
+        );
+        let new_rule = Rule {
+            source: header.get_source(),
+            destination: header.get_destination(),
+        };
+        let mut _alert = match gimme_alert_if_it_here(&new_rule, rules, &header) {
+            Some(param) => {
+                alerts.push(header.get_flags());
+            }
+            None => (),
+        };
     }
 }
 
-fn handle_ethernet_frame(interface: &NetworkInterface, ethernet: &EthernetPacket) {
+fn handle_ethernet_frame(
+    interface: &NetworkInterface,
+    ethernet: &EthernetPacket,
+    rules: &mut Vec<Rule>,
+    alerts: &mut Vec<u8>,
+) {
     let interface_name = &interface.name[..];
     match ethernet.get_ethertype() {
-        EtherTypes::Ipv4 => handle_ipv4_packet(interface_name, ethernet),
+        EtherTypes::Ipv4 => handle_ipv4_packet(interface_name, ethernet, rules, alerts),
         _ => (),
     }
 }
 
-pub fn traffic_interception() {
+pub fn traffic_interception(rules: &mut Vec<Rule>, alerts: &mut Vec<u8>) {
     use pnet::datalink::Channel::Ethernet;
     let iface_name = match env::args().nth(1) {
         Some(n) => n,
@@ -73,7 +91,12 @@ pub fn traffic_interception() {
     loop {
         match rx.next() {
             Ok(packet) => {
-                handle_ethernet_frame(&interface, &EthernetPacket::new(packet).unwrap());
+                handle_ethernet_frame(
+                    &interface,
+                    &EthernetPacket::new(packet).unwrap(),
+                    rules,
+                    alerts,
+                );
             }
             Err(e) => panic!("packetdump: unable to receive packet: {}", e),
         }
