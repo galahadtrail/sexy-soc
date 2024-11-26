@@ -5,11 +5,8 @@ mod output;
 mod rules;
 
 use authorization::authorize;
-use capture::traffic_interception;
 use menu::infinite_action_loop;
 use output::print_hello_message;
-use prelude::*;
-use rules::{read_from_file, write_to_file, Rule};
 
 mod prelude {
     pub use colored::*;
@@ -28,9 +25,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_hello_message();
 
     let privileges = authorize()?;
+    let clone_prevs = privileges.clone();
 
-    infinite_action_loop(&privileges);
+    ctrlc::set_handler(move || {
+        println!("\nПолучен сигнал Ctrl+C! Возврат к меню.");
+        infinite_action_loop(&privileges);
+    })
+    .expect("Ошибка при установке обработчика Ctrl+C");
 
-    //traffic_interception();
+    infinite_action_loop(&clone_prevs);
+
     Ok(())
 }

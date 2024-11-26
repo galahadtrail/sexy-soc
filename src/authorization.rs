@@ -2,7 +2,7 @@ use crate::prelude::*;
 use hex;
 use sha3::{Digest, Sha3_256};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Privileges {
     Admin,
     Viewer,
