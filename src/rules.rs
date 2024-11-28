@@ -9,10 +9,10 @@ pub struct Rule {
 }
 
 impl Rule {
-    pub fn new(sourc: String, dest: String) -> Rule {
+    pub fn new(sourc: &str, dest: &str) -> Rule {
         Rule {
-            source: sourc.parse().expect("Wrong source!"),
-            destination: dest.parse().expect("Wrong destination!"),
+            source: sourc.parse::<Ipv4Addr>().expect("Wrong source!"),
+            destination: dest.parse::<Ipv4Addr>().expect("Wrong destination!"),
         }
     }
 
@@ -70,7 +70,7 @@ fn add_rule_from_console(rules: &mut Vec<Rule>) {
     let mut destination = String::new();
     let _ = io::stdin().read_line(&mut destination);
 
-    let new_rule = Rule::new(source, destination);
+    let new_rule = Rule::new(source.trim(), destination.trim());
     rules.push(new_rule)
 }
 
@@ -83,7 +83,7 @@ fn del_rule_from_console(rules: &mut Vec<Rule>) {
     let mut destination = String::new();
     let _ = io::stdin().read_line(&mut destination);
 
-    let depr_rule = Rule::new(source, destination);
+    let depr_rule = Rule::new(source.trim(), destination.trim());
     rules.retain(|elem| *elem != depr_rule);
 }
 
@@ -94,13 +94,14 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>) {
         println!("{}", rule);
     }
 
-    println!("Please tell me what you want to do.\n1. Add rule\n2. Delete rule");
+    println!("Please tell me what you want to do.\n1. Add rule\n2. Delete rule\n3. Exit");
     let mut option = String::new();
     let _ = io::stdin().read_line(&mut option);
 
     match option.as_str().trim() {
         "1" => add_rule_from_console(rules),
         "2" => del_rule_from_console(rules),
+        "3" => return,
         _ => rules_endpoint(rules),
     };
 }

@@ -24,7 +24,10 @@ pub fn infinite_action_loop(privilege: &Privileges, rules: &mut Vec<Rule>) {
             Statement::ComputerInformation => println!("2"),
             Statement::NetworkRulesChanging => rules_endpoint(rules),
             Statement::ComputerRulesChanging => println!("4"),
-            Statement::Exit => process::exit(0),
+            Statement::Exit => {
+                let _ = write_to_file(rules.to_vec());
+                process::exit(0)
+            }
         }
     }
 }
