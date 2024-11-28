@@ -33,14 +33,14 @@ fn menu(mut welcome: Statement) -> Statement {
     let mut option = String::new();
     let _ = io::stdin().read_line(&mut option);
 
-    welcome = match option.as_str() {
+    welcome = match option.as_str().trim() {
         "0" => Statement::Menu,
         "1" => Statement::TrafficInterception,
         "2" => Statement::ComputerInformation,
         "3" => Statement::NetworkRulesChanging,
         "4" => Statement::ComputerRulesChanging,
         "5" => Statement::Exit,
-        _ => Statement::Menu,
+        _ => Statement::Exit,
     };
     welcome
 }
