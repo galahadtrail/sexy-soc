@@ -10,6 +10,7 @@ use output::print_hello_message;
 use rules::read_from_file;
 
 mod prelude {
+    pub use crate::authorization::Privileges;
     pub use crate::rules::{read_from_file, write_to_file, Rule};
     pub use colored::*;
     pub use pnet::datalink::NetworkInterface;

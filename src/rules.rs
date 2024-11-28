@@ -97,7 +97,11 @@ fn del_rule_from_console(rules: &mut Vec<Rule>) {
     rules.retain(|elem| *elem != depr_rule);
 }
 
-pub fn rules_endpoint(rules: &mut Vec<Rule>) {
+pub fn rules_endpoint(rules: &mut Vec<Rule>, privilege: &Privileges) {
+    if *privilege != Privileges::Admin {
+        return;
+    }
+
     let mut temp_for_output = "Here are all rules you have:"
         .truecolor(193, 251, 222)
         .on_purple();
@@ -121,6 +125,6 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>) {
         "1" => add_rule_from_console(rules),
         "2" => del_rule_from_console(rules),
         "3" => return,
-        _ => rules_endpoint(rules),
+        _ => rules_endpoint(rules, privilege),
     };
 }
