@@ -68,3 +68,13 @@ pub fn add_rule(rules: &mut Vec<Rule>, new_rule: &Rule) {
 pub fn del_rule(rules: &mut Vec<Rule>, deprecated_rule: &Rule) {
     rules.retain(|elem| elem != deprecated_rule);
 }
+
+pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
+    println!("Write please source and destination IP's\nSource:");
+    let mut source = String::new();
+    let _ = io::stdin().read_line(&mut source);
+
+    println!("Destination:");
+    let mut destination = String::new();
+    let _ = io::stdin().read_line(&mut destination);
+}
