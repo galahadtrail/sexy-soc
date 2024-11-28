@@ -31,6 +31,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let privileges = authorize()?;
 
+    ctrlc::set_handler(move || {
+        println!("Получен сигнал Ctrl+C! Выход из функции перехвата");
+        return;
+    })
+    .expect("Ошибка при установке обработчика Ctrl+C");
+
     let mut rules = read_from_file().expect("Something wrong with reading rules from file");
     let mut alerts: Vec<Alert> = Vec::new();
 

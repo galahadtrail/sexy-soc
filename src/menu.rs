@@ -1,3 +1,4 @@
+use crate::capture::{print_all_net_alert, traffic_interception};
 use crate::prelude::*;
 use crate::rules::rules_endpoint;
 use std::process;
@@ -12,19 +13,24 @@ pub enum Statement {
     Exit,
 }
 
-pub fn infinite_action_loop(privilege: &Privileges, rules: &mut Vec<Rule>, alert: &mut Vec<Alert>) {
+pub fn infinite_action_loop(
+    privilege: &Privileges,
+    rules: &mut Vec<Rule>,
+    alerts: &mut Vec<Alert>,
+) {
     loop {
         let mut welcome = Statement::Menu;
         welcome = menu(welcome);
 
         match welcome {
             Statement::Menu => continue,
-            Statement::TrafficInterception => println!("1"),
+            Statement::TrafficInterception => traffic_interception(rules, alerts),
             Statement::ComputerInformation => println!("2"),
             Statement::NetworkRulesChanging => rules_endpoint(rules, privilege),
             Statement::ComputerRulesChanging => println!("4"),
             Statement::Exit => {
                 let _ = write_to_file(rules.to_vec());
+                print_all_net_alert(alerts);
                 process::exit(0)
             }
         }

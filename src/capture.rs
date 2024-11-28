@@ -22,9 +22,15 @@ impl fmt::Display for Alert {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "(source: {}, destination: {}, TTL: {}, Flags: {}, Version: {})",
+            "Achtung! (source: {}, destination: {}, TTL: {}, Flags: {}, Version: {})",
             self.source, self.destination, self.ttl, self.flags, self.version
         )
+    }
+}
+
+pub fn print_all_net_alert(alerts: &mut Vec<Alert>) {
+    for alert in alerts.iter() {
+        println!("{}", alert);
     }
 }
 
@@ -41,21 +47,9 @@ fn gimme_alert_if_it_here<'a>(
     false
 }
 
-fn handle_ipv4_packet(
-    interface_name: &str,
-    ethernet: &EthernetPacket,
-    rules: &mut Vec<Rule>,
-    alerts: &mut Vec<Alert>,
-) {
+fn handle_ipv4_packet(ethernet: &EthernetPacket, rules: &mut Vec<Rule>, alerts: &mut Vec<Alert>) {
     let header = Ipv4Packet::new(ethernet.payload());
     if let Some(header) = header {
-        println!(
-            "IPv4 Packet: interface: {}, source: {}, destination: {}, payload: {:?}",
-            interface_name,
-            IpAddr::V4(header.get_source()),
-            IpAddr::V4(header.get_destination()),
-            header.payload()
-        );
         let new_rule = Rule {
             source: header.get_source(),
             destination: header.get_destination(),
@@ -78,25 +72,17 @@ fn handle_ipv4_packet(
 }
 
 fn handle_ethernet_frame(
-    interface: &NetworkInterface,
     ethernet: &EthernetPacket,
     rules: &mut Vec<Rule>,
     alerts: &mut Vec<Alert>,
 ) {
-    let interface_name = &interface.name[..];
     match ethernet.get_ethertype() {
-        EtherTypes::Ipv4 => handle_ipv4_packet(interface_name, ethernet, rules, alerts),
+        EtherTypes::Ipv4 => handle_ipv4_packet(ethernet, rules, alerts),
         _ => (),
     }
 }
 
 pub fn traffic_interception(rules: &mut Vec<Rule>, alerts: &mut Vec<Alert>) {
-    ctrlc::set_handler(move || {
-        println!("Получен сигнал Ctrl+C! Выход из функции перехвата");
-        return;
-    })
-    .expect("Ошибка при установке обработчика Ctrl+C");
-
     use pnet::datalink::Channel::Ethernet;
     let iface_name = match env::args().nth(1) {
         Some(n) => n,
@@ -125,14 +111,9 @@ pub fn traffic_interception(rules: &mut Vec<Rule>, alerts: &mut Vec<Alert>) {
     loop {
         match rx.next() {
             Ok(packet) => {
-                handle_ethernet_frame(
-                    &interface,
-                    &EthernetPacket::new(packet).unwrap(),
-                    rules,
-                    alerts,
-                );
+                handle_ethernet_frame(&EthernetPacket::new(packet).unwrap(), rules, alerts);
             }
-            Err(e) => panic!("packetdump: unable to receive packet: {}", e),
+            Err(e) => return,
         }
     }
 }
