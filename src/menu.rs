@@ -12,7 +12,7 @@ pub enum Statement {
     Exit,
 }
 
-pub fn infinite_action_loop(privilege: &Privileges, rules: &mut Vec<Rule>) {
+pub fn infinite_action_loop(privilege: &Privileges, rules: &mut Vec<Rule>, alert: &mut Vec<Alert>) {
     loop {
         let mut welcome = Statement::Menu;
         welcome = menu(welcome);

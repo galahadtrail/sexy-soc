@@ -7,10 +7,10 @@ mod rules;
 use authorization::authorize;
 use menu::infinite_action_loop;
 use output::print_hello_message;
-use rules::read_from_file;
 
 mod prelude {
     pub use crate::authorization::Privileges;
+    pub use crate::capture::Alert;
     pub use crate::rules::{read_from_file, write_to_file, Rule};
     pub use colored::*;
     pub use pnet::datalink::NetworkInterface;
@@ -32,8 +32,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let privileges = authorize()?;
 
     let mut rules = read_from_file().expect("Something wrong with reading rules from file");
+    let mut alerts: Vec<Alert> = Vec::new();
 
-    infinite_action_loop(&privileges, &mut rules);
+    infinite_action_loop(&privileges, &mut rules, &mut alerts);
 
     Ok(())
 }

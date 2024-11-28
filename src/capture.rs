@@ -8,7 +8,7 @@ use std::env;
 use std::io::{self, Write};
 use std::process;
 
-struct Alert {
+pub struct Alert {
     ttl: u8,
     flags: u8,
     version: u8,
@@ -77,6 +77,12 @@ fn handle_ethernet_frame(
 }
 
 pub fn traffic_interception(rules: &mut Vec<Rule>, alerts: &mut Vec<Alert>) {
+    ctrlc::set_handler(move || {
+        println!("Получен сигнал Ctrl+C! Выход из функции перехвата");
+        return;
+    })
+    .expect("Ошибка при установке обработчика Ctrl+C");
+
     use pnet::datalink::Channel::Ethernet;
     let iface_name = match env::args().nth(1) {
         Some(n) => n,
