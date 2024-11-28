@@ -9,10 +9,10 @@ pub(crate) struct Rule {
 }
 
 impl Rule {
-    pub fn new(sourc: Ipv4Addr, dest: Ipv4Addr) -> Rule {
+    pub fn new(sourc: String, dest: String) -> Rule {
         Rule {
-            source: sourc,
-            destination: dest,
+            source: sourc.parse().expect("Wrong source!"),
+            destination: dest.parse().expect("Wrong destination!"),
         }
     }
 
@@ -61,12 +61,12 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
     Ok(rules_unjsoned)
 }
 
-pub fn add_rule(rules: &mut Vec<Rule>, new_rule: &Rule) {
-    rules.push(new_rule.clone());
+pub fn add_rule(rules: &mut Vec<Rule>, new_rule: Rule) {
+    rules.push(new_rule);
 }
 
-pub fn del_rule(rules: &mut Vec<Rule>, deprecated_rule: &Rule) {
-    rules.retain(|elem| elem != deprecated_rule);
+pub fn del_rule(rules: &mut Vec<Rule>, deprecated_rule: Rule) {
+    rules.retain(|elem| *elem != deprecated_rule);
 }
 
 pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
@@ -77,4 +77,6 @@ pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
     println!("Destination:");
     let mut destination = String::new();
     let _ = io::stdin().read_line(&mut destination);
+
+    let new_rule = Rule::new(source, destination);
 }
