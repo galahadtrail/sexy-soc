@@ -102,7 +102,7 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>, privilege: &Privileges) {
         return;
     }
 
-    let mut temp_for_output = "Here are all rules you have:"
+    let temp_for_output = "Here are all rules you have:"
         .truecolor(193, 251, 222)
         .on_purple();
 
@@ -112,11 +112,7 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>, privilege: &Privileges) {
         println!("{}", rule);
     }
 
-    temp_for_output = "Please tell me what you want to do.\n1. Add rule\n2. Delete rule\n3. Exit"
-        .truecolor(193, 251, 222)
-        .on_purple();
-
-    println!("{}", temp_for_output);
+    println!("Please tell me what you want to do.\n1. Add rule\n2. Delete rule\n3. Exit");
 
     let mut option = String::new();
     let _ = io::stdin().read_line(&mut option);
