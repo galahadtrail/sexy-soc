@@ -61,14 +61,6 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
     Ok(rules_unjsoned)
 }
 
-pub fn add_rule(rules: &mut Vec<Rule>, new_rule: Rule) {
-    rules.push(new_rule);
-}
-
-pub fn del_rule(rules: &mut Vec<Rule>, deprecated_rule: Rule) {
-    rules.retain(|elem| *elem != deprecated_rule);
-}
-
 pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
     println!("Write please source and destination IP's\nSource:");
     let mut source = String::new();
@@ -79,4 +71,18 @@ pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
     let _ = io::stdin().read_line(&mut destination);
 
     let new_rule = Rule::new(source, destination);
+    rules.push(new_rule)
+}
+
+pub fn del_rule_from_console(rules: &mut Vec<Rule>) {
+    println!("Write please source and destination IP's\nSource:");
+    let mut source = String::new();
+    let _ = io::stdin().read_line(&mut source);
+
+    println!("Destination:");
+    let mut destination = String::new();
+    let _ = io::stdin().read_line(&mut destination);
+
+    let depr_rule = Rule::new(source, destination);
+    rules.retain(|elem| *elem != depr_rule);
 }
