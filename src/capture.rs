@@ -4,16 +4,28 @@ extern crate pnet;
 use crate::rules::Rule;
 use pnet::datalink;
 
+use core::fmt;
 use std::env;
 use std::io::{self, Write};
 use std::process;
 
+#[derive(Debug)]
 pub struct Alert {
     ttl: u8,
     flags: u8,
     version: u8,
     source: Ipv4Addr,
     destination: Ipv4Addr,
+}
+
+impl fmt::Display for Alert {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "(source: {}, destination: {}, TTL: {}, Flags: {}, Version: {})",
+            self.source, self.destination, self.ttl, self.flags, self.version
+        )
+    }
 }
 
 fn gimme_alert_if_it_here<'a>(
@@ -50,13 +62,15 @@ fn handle_ipv4_packet(
         };
         let mut _alert = match gimme_alert_if_it_here(&new_rule, rules, &header) {
             true => {
-                alerts.push(Alert {
+                let new_alert = Alert {
                     ttl: header.get_ttl(),
                     flags: header.get_flags(),
                     version: header.get_version(),
                     source: header.get_source(),
                     destination: header.get_destination(),
-                });
+                };
+                println!("{}", new_alert);
+                alerts.push(new_alert);
             }
             false => (),
         };
