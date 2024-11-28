@@ -1,5 +1,6 @@
 use crate::authorization::Privileges;
 use crate::prelude::*;
+use crate::rules::rules_endpoint;
 use std::process;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -12,7 +13,7 @@ pub enum Statement {
     Exit,
 }
 
-pub fn infinite_action_loop(privilege: &Privileges) {
+pub fn infinite_action_loop(privilege: &Privileges, rules: &mut Vec<Rule>) {
     loop {
         let mut welcome = Statement::Menu;
         let mut welcome = menu(welcome);
@@ -21,7 +22,7 @@ pub fn infinite_action_loop(privilege: &Privileges) {
             Statement::Menu => continue,
             Statement::TrafficInterception => println!("1"),
             Statement::ComputerInformation => println!("2"),
-            Statement::NetworkRulesChanging => println!("3"),
+            Statement::NetworkRulesChanging => rules_endpoint(rules),
             Statement::ComputerRulesChanging => println!("4"),
             Statement::Exit => process::exit(0),
         }

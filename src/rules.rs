@@ -3,7 +3,7 @@ use core::fmt;
 use crate::prelude::*;
 
 #[derive(serde_derive::Deserialize, serde_derive::Serialize, Debug, PartialEq, Eq, Clone)]
-pub(crate) struct Rule {
+pub struct Rule {
     pub source: Ipv4Addr,
     pub destination: Ipv4Addr,
 }
@@ -61,7 +61,7 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
     Ok(rules_unjsoned)
 }
 
-pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
+fn add_rule_from_console(rules: &mut Vec<Rule>) {
     println!("Write please source and destination IP's\nSource:");
     let mut source = String::new();
     let _ = io::stdin().read_line(&mut source);
@@ -74,7 +74,7 @@ pub fn add_rule_from_console(rules: &mut Vec<Rule>) {
     rules.push(new_rule)
 }
 
-pub fn del_rule_from_console(rules: &mut Vec<Rule>) {
+fn del_rule_from_console(rules: &mut Vec<Rule>) {
     println!("Write please source and destination IP's\nSource:");
     let mut source = String::new();
     let _ = io::stdin().read_line(&mut source);
@@ -85,4 +85,22 @@ pub fn del_rule_from_console(rules: &mut Vec<Rule>) {
 
     let depr_rule = Rule::new(source, destination);
     rules.retain(|elem| *elem != depr_rule);
+}
+
+pub fn rules_endpoint(rules: &mut Vec<Rule>) {
+    println!("Here are all rules you have:");
+
+    for rule in rules.iter() {
+        println!("{}", rule);
+    }
+
+    println!("Please tell me what you want to do.\n1. Add rule\n2. Delete rule");
+    let mut option = String::new();
+    let _ = io::stdin().read_line(&mut option);
+
+    match option.as_str().trim() {
+        "1" => add_rule_from_console(rules),
+        "2" => del_rule_from_console(rules),
+        _ => rules_endpoint(rules),
+    };
 }
