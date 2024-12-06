@@ -54,6 +54,33 @@ pub fn read_from_file() -> std::io::Result<Vec<Rule>> {
     Ok(rules_unjsoned)
 }
 
+pub fn write_hash_rules_from_file(path_to_file: &str, rules: Vec<String>) -> std::io::Result<()> {
+    let rules_jsoned: Vec<String> = rules
+        .iter()
+        .map(|rule| serde_json::to_string(rule).unwrap())
+        .collect();
+
+    let file = File::create(path_to_file)?;
+    let mut writer = BufWriter::new(file);
+    serde_json::to_writer(&mut writer, &rules_jsoned)?;
+    writer.flush()?;
+
+    Ok(())
+}
+
+pub fn read_hash_rules_from_file(path_to_file: &str) -> io::Result<Vec<String>> {
+    let file = File::open(path_to_file)?;
+    let reader = BufReader::new(file);
+    let rules_raw: Vec<String> = serde_json::from_reader(reader)?;
+
+    let rules_unjsoned: Vec<String> = rules_raw
+        .iter()
+        .map(|rule| serde_json::from_str(&rule).unwrap())
+        .collect();
+
+    Ok(rules_unjsoned)
+}
+
 fn add_rule_from_console(rules: &mut Vec<Rule>) {
     let mut temp_for_output = "Write please source and destination IP's\nSource:"
         .truecolor(193, 251, 222)

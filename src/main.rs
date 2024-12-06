@@ -1,5 +1,6 @@
 mod authorization;
 mod capture;
+mod connection;
 mod menu;
 mod output;
 mod rules;
