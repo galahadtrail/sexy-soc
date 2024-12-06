@@ -15,13 +15,6 @@ impl Rule {
             destination: dest.parse::<Ipv4Addr>().expect("Wrong destination!"),
         }
     }
-
-    pub fn match_with(&self, another: &Rule) -> bool {
-        if self == another {
-            return true;
-        }
-        false
-    }
 }
 
 impl fmt::Display for Rule {

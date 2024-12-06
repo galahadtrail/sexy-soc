@@ -19,8 +19,7 @@ pub fn infinite_action_loop(
     alerts: &mut Vec<Alert>,
 ) {
     loop {
-        let mut welcome = Statement::Menu;
-        welcome = menu(welcome);
+        let welcome = menu();
 
         match welcome {
             Statement::Menu => continue,
@@ -37,12 +36,12 @@ pub fn infinite_action_loop(
     }
 }
 
-fn menu(mut welcome: Statement) -> Statement {
+fn menu() -> Statement {
     println!("Please tell me what you want to do\n\n0. Menu again\n1. Traffic Interception\n2. Computer Information\n3. Network Rules Changing\n4. Computer Rules Changing\n5. Exit");
     let mut option = String::new();
     let _ = io::stdin().read_line(&mut option);
 
-    welcome = match option.as_str().trim() {
+    let welcome = match option.as_str().trim() {
         "0" => Statement::Menu,
         "1" => Statement::TrafficInterception,
         "2" => Statement::ComputerInformation,

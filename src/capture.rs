@@ -34,11 +34,7 @@ pub fn print_all_net_alert(alerts: &mut Vec<Alert>) {
     }
 }
 
-fn gimme_alert_if_it_here<'a>(
-    some_packet_rule: &'a Rule,
-    rules: &'a mut Vec<Rule>,
-    header: &'a Ipv4Packet<'a>,
-) -> bool {
+fn gimme_alert_if_it_here<'a>(some_packet_rule: &'a Rule, rules: &'a mut Vec<Rule>) -> bool {
     for rule in rules {
         if rule == some_packet_rule {
             return true;
@@ -54,7 +50,7 @@ fn handle_ipv4_packet(ethernet: &EthernetPacket, rules: &mut Vec<Rule>, alerts: 
             source: header.get_source(),
             destination: header.get_destination(),
         };
-        let mut _alert = match gimme_alert_if_it_here(&new_rule, rules, &header) {
+        let mut _alert = match gimme_alert_if_it_here(&new_rule, rules) {
             true => {
                 let new_alert = Alert {
                     ttl: header.get_ttl(),
@@ -113,7 +109,7 @@ pub fn traffic_interception(rules: &mut Vec<Rule>, alerts: &mut Vec<Alert>) {
             Ok(packet) => {
                 handle_ethernet_frame(&EthernetPacket::new(packet).unwrap(), rules, alerts);
             }
-            Err(e) => return,
+            Err(_e) => return,
         }
     }
 }
