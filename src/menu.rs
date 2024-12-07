@@ -26,13 +26,14 @@ pub fn infinite_action_loop(
             Statement::Menu => continue,
             Statement::TrafficInterception => traffic_interception(rules, alerts),
             Statement::ComputerInformation => {
-                let rules = read_hash_rules_from_file("src/rules/rules.txt").unwrap();
+                let hash_rules = read_hash_rules_from_file("src/rules/rules.txt").unwrap();
+                let rules_str = hash_rules.join("@");
 
                 let should_run = Arc::new(Mutex::new(true));
                 let should_run_clone = Arc::clone(&should_run);
 
                 thread::spawn(move || {
-                    connection_start(should_run_clone);
+                    connection_start(should_run_clone, &rules_str);
                 });
                 let mut input = String::new();
 

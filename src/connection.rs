@@ -8,10 +8,9 @@ pub struct ComputerAlert {
     path: String,
 }
 
-fn handle_client(mut stream: TcpStream) {
+fn handle_client(mut stream: TcpStream, hash_rules: String) {
     // Отправляем сообщение клиенту
-    let msg = "Hello from server!";
-    stream.write(msg.as_bytes()).unwrap();
+    stream.write(hash_rules.as_bytes()).unwrap();
 
     // Читаем ответ от клиента
     let mut buffer = [0; 1024];
@@ -20,13 +19,14 @@ fn handle_client(mut stream: TcpStream) {
     println!("Received from client: {}", response);
 }
 
-pub fn connection_start(should_run: Arc<Mutex<bool>>) {
+pub fn connection_start(should_run: Arc<Mutex<bool>>, hash_rules: &str) {
     // Создаем TCP слушатель на порту 7878
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let mut str = "Server is listening on port 7878"
         .truecolor(193, 251, 222)
         .on_purple();
     println!("{}", str);
+    let hash_rules_owned = hash_rules.to_string();
 
     for stream in listener.incoming() {
         if !*should_run.lock().unwrap() {
@@ -38,8 +38,9 @@ pub fn connection_start(should_run: Arc<Mutex<bool>>) {
         match stream {
             Ok(stream) => {
                 // Создаем новый поток для обработки клиента
+                let hash_rules_clone = hash_rules_owned.clone();
                 thread::spawn(move || {
-                    handle_client(stream);
+                    handle_client(stream, hash_rules_clone);
                 });
             }
             Err(_e) => {
