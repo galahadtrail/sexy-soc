@@ -12,7 +12,10 @@ use output::print_hello_message;
 mod prelude {
     pub use crate::authorization::Privileges;
     pub use crate::capture::Alert;
-    pub use crate::rules::{read_from_file, write_to_file, Rule};
+    pub use crate::connection::ComputerAlert;
+    pub use crate::rules::{
+        read_from_file, read_hash_rules_from_file, write_hash_rules_from_file, write_to_file, Rule,
+    };
     pub use colored::*;
     pub use pnet::datalink::NetworkInterface;
     pub use pnet::packet::ethernet::{EtherTypes, EthernetPacket};

@@ -26,6 +26,8 @@ pub fn infinite_action_loop(
             Statement::Menu => continue,
             Statement::TrafficInterception => traffic_interception(rules, alerts),
             Statement::ComputerInformation => {
+                let rules = read_hash_rules_from_file("src/rules/rules.txt").unwrap();
+
                 let should_run = Arc::new(Mutex::new(true));
                 let should_run_clone = Arc::clone(&should_run);
 

@@ -3,6 +3,11 @@ use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::str;
 
+pub struct ComputerAlert {
+    ip: String,
+    path: String,
+}
+
 fn handle_client(mut stream: TcpStream) {
     // Отправляем сообщение клиенту
     let msg = "Hello from server!";
