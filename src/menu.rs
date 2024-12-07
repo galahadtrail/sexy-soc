@@ -34,6 +34,10 @@ pub fn infinite_action_loop(
                 });
                 let mut input = String::new();
 
+                let str = "Type 'exit' to turn off the connection.."
+                    .truecolor(193, 251, 222)
+                    .on_purple();
+                println!("{}", str);
                 loop {
                     input.clear();
                     io::stdin().read_line(&mut input).unwrap();

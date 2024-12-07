@@ -18,11 +18,15 @@ fn handle_client(mut stream: TcpStream) {
 pub fn connection_start(should_run: Arc<Mutex<bool>>) {
     // Создаем TCP слушатель на порту 7878
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    println!("Server is listening on port 7878");
+    let mut str = "Server is listening on port 7878"
+        .truecolor(193, 251, 222)
+        .on_purple();
+    println!("{}", str);
 
     for stream in listener.incoming() {
         if !*should_run.lock().unwrap() {
-            println!("Сервер завершает работу.");
+            str = "Server've stopped".truecolor(193, 251, 222).on_purple();
+            println!("{}", str);
             break;
         }
 
