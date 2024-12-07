@@ -1,4 +1,5 @@
 use crate::capture::{print_all_net_alert, traffic_interception};
+use crate::connection::connection_start;
 use crate::prelude::*;
 use crate::rules::rules_endpoint;
 use std::process;
@@ -24,7 +25,24 @@ pub fn infinite_action_loop(
         match welcome {
             Statement::Menu => continue,
             Statement::TrafficInterception => traffic_interception(rules, alerts),
-            Statement::ComputerInformation => println!("2"),
+            Statement::ComputerInformation => {
+                let should_run = Arc::new(Mutex::new(true));
+                let should_run_clone = Arc::clone(&should_run);
+
+                thread::spawn(move || {
+                    connection_start(should_run_clone);
+                });
+                let mut input = String::new();
+
+                loop {
+                    input.clear();
+                    io::stdin().read_line(&mut input).unwrap();
+                    if input.trim() == "exit" {
+                        *should_run.lock().unwrap() = false;
+                        break;
+                    }
+                }
+            }
             Statement::NetworkRulesChanging => rules_endpoint(rules, privilege),
             Statement::ComputerRulesChanging => println!("4"),
             Statement::Exit => {

@@ -1,38 +1,41 @@
-extern crate tokio;
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::net::{TcpListener, TcpStream};
-use tokio::sync::broadcast;
+use crate::prelude::*;
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+use std::str;
 
-#[tokio::main]
-async fn connection_start() -> std::io::Result<()> {
-    let listener = TcpListener::bind("127.0.0.1:8080").await?;
-    let (tx, _) = broadcast::channel(16);
+fn handle_client(mut stream: TcpStream) {
+    // Отправляем сообщение клиенту
+    let msg = "Hello from server!";
+    stream.write(msg.as_bytes()).unwrap();
 
-    loop {
-        let (socket, _) = listener.accept().await?;
-        let tx = tx.clone();
-        tokio::spawn(handle_client(socket, tx));
-    }
+    // Читаем ответ от клиента
+    let mut buffer = [0; 1024];
+    let _ = stream.read(&mut buffer).unwrap();
+    let response = str::from_utf8(&buffer).unwrap();
+    println!("Received from client: {}", response);
 }
 
-async fn handle_client(socket: TcpStream, tx: broadcast::Sender<String>) {
-    let (reader, mut writer) = socket.into_split();
-    let mut reader = BufReader::new(reader);
-    let mut buf = String::new();
+pub fn connection_start(should_run: Arc<Mutex<bool>>) {
+    // Создаем TCP слушатель на порту 7878
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    println!("Server is listening on port 7878");
 
-    let welcome_message = "Добро пожаловать на сервер!\n";
-    if let Err(e) = writer.write_all(welcome_message.as_bytes()).await {
-        eprintln!("Ошибка при отправке сообщения: {:?}", e);
-        return;
-    }
-
-    loop {
-        buf.clear();
-        let bytes_read = reader.read_line(&mut buf).await.unwrap();
-        if bytes_read == 0 {
-            break; // Соединение закрыто
+    for stream in listener.incoming() {
+        if !*should_run.lock().unwrap() {
+            println!("Сервер завершает работу.");
+            break;
         }
 
-        let _ = tx.send(buf.clone()); // Рассылка сообщения всем клиентам
+        match stream {
+            Ok(stream) => {
+                // Создаем новый поток для обработки клиента
+                thread::spawn(move || {
+                    handle_client(stream);
+                });
+            }
+            Err(_e) => {
+                return;
+            }
+        }
     }
 }
