@@ -74,7 +74,11 @@ pub fn infinite_action_loop(
 }
 
 fn menu() -> Statement {
-    println!("Please tell me what you want to do\n\n0. Menu again\n1. Traffic Interception\n2. Computer Information\n3. Network Rules Changing\n4. Computer Rules Changing\n5. Exit");
+    let tell = "Please tell me what you want to do"
+        .truecolor(193, 251, 222)
+        .on_purple();
+    println!("{}", tell);
+    println!("\n0. Menu again\n1. Traffic Interception\n2. Computer Information\n3. Network Rules Changing\n4. Computer Rules Changing\n5. Exit");
     let mut option = String::new();
     let _ = io::stdin().read_line(&mut option);
 

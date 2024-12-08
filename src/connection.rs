@@ -60,10 +60,14 @@ pub fn connection_start(
                         .split("@")
                         .map(String::from)
                         .collect();
-                    hash_alerts.lock().unwrap().push(ComputerAlert {
+
+                    let new_alert = ComputerAlert {
                         ip: host_ip,
                         paths: alerts,
-                    });
+                    };
+
+                    println!("Achtung! {:?}", new_alert);
+                    hash_alerts.lock().unwrap().push(new_alert);
                 }
             }
             Err(_e) => {
