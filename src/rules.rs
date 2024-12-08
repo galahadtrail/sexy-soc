@@ -144,3 +144,15 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>, privilege: &Privileges) {
         _ => rules_endpoint(rules, privilege),
     };
 }
+
+fn add_hash_rule(hash_rules: &mut Vec<String>) {
+    let mut temp_for_output = "Write please your hash:"
+        .truecolor(193, 251, 222)
+        .on_purple();
+
+    println!("{}", temp_for_output);
+
+    let mut new_hash = String::new();
+    let _ = io::stdin().read_line(&mut new_hash);
+    hash_rules.push(new_hash);
+}

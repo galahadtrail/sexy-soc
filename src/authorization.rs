@@ -50,7 +50,7 @@ pub fn authorize() -> Result<Privileges, Error> {
 
     let res_creds = vec![String::from(before), String::from(after)];
 
-    let write = "Enter your password".truecolor(193, 251, 222).on_purple();
+    let write = "Enter your password:".truecolor(193, 251, 222).on_purple();
     println!("{}", write);
     let _ = io::stdin().read_line(&mut password);
 
