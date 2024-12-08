@@ -146,7 +146,7 @@ pub fn rules_endpoint(rules: &mut Vec<Rule>, privilege: &Privileges) {
 }
 
 fn add_hash_rule(hash_rules: &mut Vec<String>) {
-    let mut temp_for_output = "Write please your new hash:"
+    let temp_for_output = "Write please your new hash:"
         .truecolor(193, 251, 222)
         .on_purple();
 
@@ -158,7 +158,7 @@ fn add_hash_rule(hash_rules: &mut Vec<String>) {
 }
 
 fn del_hash_rule(hash_rules: &mut Vec<String>) {
-    let mut temp_for_output = "Write please your deprecated hash:"
+    let temp_for_output = "Write please your deprecated hash:"
         .truecolor(193, 251, 222)
         .on_purple();
 

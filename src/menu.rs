@@ -56,7 +56,14 @@ pub fn infinite_action_loop(
             Statement::Exit => {
                 let _ = write_to_file(rules.to_vec());
                 let _ = write_hash_rules_from_file("src/rules/rules.txt", hash_rules.to_vec());
+
+                let mut write = "All net alerts".truecolor(193, 251, 222).on_purple();
+                println!("{}", write);
                 print_all_net_alert(alerts);
+
+                write = "All agents alerts".truecolor(193, 251, 222).on_purple();
+                println!("{}", write);
+
                 process::exit(0)
             }
         }
