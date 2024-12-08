@@ -18,9 +18,10 @@ fn handle_client(
     stream.write(hash_rules.as_bytes()).unwrap();
 
     // Читаем ответ от клиента
-    let mut buffer = [0; 1024];
-    let _ = stream.read(&mut buffer).unwrap();
-    *response_from_host.lock().unwrap() = String::from(str::from_utf8(&buffer).unwrap());
+    let mut buffer = [0; 4096];
+    let bytes_read = stream.read(&mut buffer).unwrap();
+    let response_str = str::from_utf8(&buffer[..bytes_read]).unwrap_or("");
+    *response_from_host.lock().unwrap() = String::from(response_str);
 }
 
 pub fn connection_start(
@@ -49,18 +50,21 @@ pub fn connection_start(
                 let hash_rules_clone = hash_rules_owned.clone();
                 let response = Arc::new(Mutex::new(String::new()));
                 let host_ip = stream.local_addr().unwrap().to_string();
-                let response_clone = Arc::clone(&response);
-                thread::spawn(move || {
+                let responce_clonable = Arc::clone(&response);
+
+                let handle = thread::spawn(move || {
+                    let response_clone = Arc::clone(&response);
                     handle_client(stream, hash_rules_clone, response_clone);
                 });
-                if *response.lock().unwrap() != "Empty" {
-                    let alerts: Vec<String> = response
+                handle.join().unwrap();
+                if *responce_clonable.lock().unwrap() != "Empty" {
+                    let alerts: Vec<String> = responce_clonable
                         .lock()
                         .unwrap()
                         .split("@")
                         .map(String::from)
                         .collect();
-
+                    println!("{}", responce_clonable.lock().unwrap());
                     let new_alert = ComputerAlert {
                         ip: host_ip,
                         paths: alerts,
