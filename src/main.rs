@@ -44,8 +44,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut rules = read_from_file().expect("Something wrong with reading rules from file");
     let mut alerts: Vec<Alert> = Vec::new();
+    let mut hash_rules = read_hash_rules_from_file("src/rules/rules.txt")
+        .expect("Something wrong with reading hash rules from file");
 
-    infinite_action_loop(&privileges, &mut rules, &mut alerts);
+    infinite_action_loop(&privileges, &mut rules, &mut alerts, &mut hash_rules);
 
     Ok(())
 }

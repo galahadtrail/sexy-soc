@@ -167,3 +167,31 @@ fn del_hash_rule(hash_rules: &mut Vec<String>) {
     let _ = io::stdin().read_line(&mut depr_hash_rule);
     hash_rules.retain(|elem| *elem != depr_hash_rule);
 }
+
+pub fn hash_rules_endpoint(hash_rules: &mut Vec<String>, privilege: &Privileges) {
+    if *privilege != Privileges::Admin {
+        return;
+    }
+
+    let temp_for_output = "Here are all rules you have:"
+        .truecolor(193, 251, 222)
+        .on_purple();
+
+    println!("{}", temp_for_output);
+
+    for rule in hash_rules.iter() {
+        println!("{}", rule);
+    }
+
+    println!("Please tell me what you want to do.\n1. Add rule\n2. Delete rule\n3. Exit");
+
+    let mut option = String::new();
+    let _ = io::stdin().read_line(&mut option);
+
+    match option.as_str().trim() {
+        "1" => add_hash_rule(hash_rules),
+        "2" => del_hash_rule(hash_rules),
+        "3" => return,
+        _ => hash_rules_endpoint(hash_rules, privilege),
+    };
+}

@@ -1,7 +1,7 @@
 use crate::capture::{print_all_net_alert, traffic_interception};
 use crate::connection::connection_start;
 use crate::prelude::*;
-use crate::rules::rules_endpoint;
+use crate::rules::{hash_rules_endpoint, rules_endpoint};
 use std::process;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -18,6 +18,7 @@ pub fn infinite_action_loop(
     privilege: &Privileges,
     rules: &mut Vec<Rule>,
     alerts: &mut Vec<Alert>,
+    hash_rules: &mut Vec<String>,
 ) {
     loop {
         let welcome = menu();
@@ -51,9 +52,10 @@ pub fn infinite_action_loop(
                 }
             }
             Statement::NetworkRulesChanging => rules_endpoint(rules, privilege),
-            Statement::ComputerRulesChanging => println!("4"),
+            Statement::ComputerRulesChanging => hash_rules_endpoint(hash_rules, privilege),
             Statement::Exit => {
                 let _ = write_to_file(rules.to_vec());
+                let _ = write_hash_rules_from_file("src/rules/rules.txt", hash_rules.to_vec());
                 print_all_net_alert(alerts);
                 process::exit(0)
             }
