@@ -46,8 +46,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut alerts: Vec<Alert> = Vec::new();
     let mut hash_rules = read_hash_rules_from_file("src/rules/rules.txt")
         .expect("Something wrong with reading hash rules from file");
+    let mut hash_alerts: Arc<Mutex<Vec<ComputerAlert>>> = Arc::new(Mutex::new(Vec::new()));
 
-    infinite_action_loop(&privileges, &mut rules, &mut alerts, &mut hash_rules);
+    infinite_action_loop(
+        &privileges,
+        &mut rules,
+        &mut alerts,
+        &mut hash_rules,
+        hash_alerts,
+    );
 
     Ok(())
 }

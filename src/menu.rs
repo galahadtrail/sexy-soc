@@ -19,6 +19,7 @@ pub fn infinite_action_loop(
     rules: &mut Vec<Rule>,
     alerts: &mut Vec<Alert>,
     hash_rules: &mut Vec<String>,
+    hash_alerts: Arc<Mutex<Vec<ComputerAlert>>>,
 ) {
     loop {
         let welcome = menu();
@@ -32,9 +33,10 @@ pub fn infinite_action_loop(
 
                 let should_run = Arc::new(Mutex::new(true));
                 let should_run_clone = Arc::clone(&should_run);
+                let hash_alert_clone = Arc::clone(&hash_alerts);
 
                 thread::spawn(move || {
-                    connection_start(should_run_clone, &rules_str);
+                    connection_start(should_run_clone, &rules_str, hash_alert_clone);
                 });
                 let mut input = String::new();
 
@@ -57,11 +59,11 @@ pub fn infinite_action_loop(
                 let _ = write_to_file(rules.to_vec());
                 let _ = write_hash_rules_from_file("src/rules/rules.txt", hash_rules.to_vec());
 
-                let mut write = "All net alerts".truecolor(193, 251, 222).on_purple();
+                let mut write = "All net alerts:".truecolor(193, 251, 222).on_purple();
                 println!("{}", write);
                 print_all_net_alert(alerts);
 
-                write = "All agents alerts".truecolor(193, 251, 222).on_purple();
+                write = "All agents alerts:".truecolor(193, 251, 222).on_purple();
                 println!("{}", write);
 
                 process::exit(0)
