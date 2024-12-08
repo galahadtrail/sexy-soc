@@ -1,5 +1,5 @@
 use crate::capture::{print_all_net_alert, traffic_interception};
-use crate::connection::connection_start;
+use crate::connection::{connection_start, print_all_hosts_alerts};
 use crate::prelude::*;
 use crate::rules::{hash_rules_endpoint, rules_endpoint};
 use std::process;
@@ -65,6 +65,7 @@ pub fn infinite_action_loop(
 
                 write = "All agents alerts:".truecolor(193, 251, 222).on_purple();
                 println!("{}", write);
+                print_all_hosts_alerts(hash_alerts);
 
                 process::exit(0)
             }

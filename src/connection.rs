@@ -3,7 +3,7 @@ use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::str;
 
-#[derive(Eq, PartialEq)]
+#[derive(Eq, PartialEq, Debug)]
 pub struct ComputerAlert {
     ip: String,
     paths: Vec<String>,
@@ -70,5 +70,12 @@ pub fn connection_start(
                 return;
             }
         }
+    }
+}
+
+pub fn print_all_hosts_alerts(hash_alerts: Arc<Mutex<Vec<ComputerAlert>>>) {
+    let alerts = hash_alerts.lock().unwrap();
+    for alert in alerts.iter() {
+        println!("{:?}", alert);
     }
 }
