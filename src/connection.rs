@@ -69,7 +69,11 @@ pub fn connection_start(
                         ip: host_ip,
                         paths: alerts,
                     };
-
+                    let _ = write_current_dt_to_log(
+                        "logs/hash_alerts.log",
+                        "success",
+                        &format!("Achtung! {:?}", new_alert),
+                    );
                     println!("Achtung! {:?}", new_alert);
                     hash_alerts.lock().unwrap().push(new_alert);
                 }

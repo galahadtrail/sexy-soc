@@ -39,7 +39,10 @@ pub fn authorize() -> Result<Privileges, Error> {
 
     let creds = match gimme_creds(&name) {
         Ok(res) => res,
-        Err(e) => panic!("{}", e),
+        Err(e) => {
+            let _ = write_current_dt_to_log("logs/auth.log", "FAIL", &name);
+            panic!("{}", e)
+        }
     };
 
     let ind = creds
@@ -66,10 +69,13 @@ pub fn authorize() -> Result<Privileges, Error> {
     let name = hex::encode(name);
 
     if res_creds[1] == password && name == res_creds[0] {
+        let _ = write_current_dt_to_log("logs/auth.log", "success", &name);
         return Ok(Privileges::Admin);
     } else if res_creds[1] == password {
+        let _ = write_current_dt_to_log("logs/auth.log", "success", &name);
         return Ok(Privileges::Viewer);
     }
 
+    let _ = write_current_dt_to_log("logs/auth.log", "FAIL", &name);
     panic!("Invalid credentials")
 }

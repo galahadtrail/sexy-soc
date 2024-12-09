@@ -59,6 +59,11 @@ fn handle_ipv4_packet(ethernet: &EthernetPacket, rules: &mut Vec<Rule>, alerts: 
                     source: header.get_source(),
                     destination: header.get_destination(),
                 };
+                let _ = write_current_dt_to_log(
+                    "logs/net_alerts.log",
+                    "success",
+                    &format!("Achtung! {:?}", new_alert),
+                );
                 println!("{}", new_alert);
                 alerts.push(new_alert);
             }

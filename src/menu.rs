@@ -67,6 +67,7 @@ pub fn infinite_action_loop(
                 println!("{}", write);
                 print_all_hosts_alerts(hash_alerts);
 
+                let _ = write_current_dt_to_log("logs/power.log", "success", "program exit!");
                 process::exit(0)
             }
         }

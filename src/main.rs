@@ -35,6 +35,7 @@ use prelude::*;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     print_hello_message();
+    let _ = write_current_dt_to_log("logs/power.log", "success", "program runs!");
 
     let privileges = authorize()?;
 
@@ -58,5 +59,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         hash_alerts,
     );
 
+    let _ = write_current_dt_to_log("logs/power.log", "success", "program exit!");
     Ok(())
 }
