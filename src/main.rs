@@ -1,6 +1,7 @@
 mod authorization;
 mod capture;
 mod connection;
+mod logger;
 mod menu;
 mod output;
 mod rules;
@@ -13,6 +14,7 @@ mod prelude {
     pub use crate::authorization::Privileges;
     pub use crate::capture::Alert;
     pub use crate::connection::ComputerAlert;
+    pub use crate::logger::write_current_dt_to_log;
     pub use crate::rules::{
         read_from_file, read_hash_rules_from_file, write_hash_rules_from_file, write_to_file, Rule,
     };
