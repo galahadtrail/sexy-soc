@@ -30,7 +30,7 @@ pub fn connection_start(
     hash_alerts: Arc<Mutex<Vec<ComputerAlert>>>,
 ) {
     // Создаем TCP слушатель на порту 7878
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let listener = TcpListener::bind("0.0.0.0:7878").unwrap();
     let mut str = "Server is listening on port 7878"
         .truecolor(193, 251, 222)
         .on_purple();

@@ -1,0 +1,5 @@
+DT: 2024-12-11 13:16:41.011703823 UTC ID: 0 SUCCESS: success CONTENT: Achtung! ComputerAlert { ip: "127.0.0.1:7878", paths: ["/home/booty/trackme/7.txt"] }
+DT: 2024-12-11 13:16:41.015391158 UTC ID: 0 SUCCESS: success CONTENT: Achtung! ComputerAlert { ip: "127.0.0.1:7878", paths: ["/home/booty/trackme/7.txt"] }
+DT: 2024-12-11 13:16:50.446272450 UTC ID: 0 SUCCESS: success CONTENT: Achtung! ComputerAlert { ip: "127.0.0.1:7878", paths: ["/home/booty/trackme/7.txt", "/home/booty/trackme/7.txt"] }
+DT: 2024-12-11 13:18:36.226165745 UTC ID: 0 SUCCESS: success CONTENT: Achtung! ComputerAlert { ip: "127.0.0.1:7878", paths: ["/home/booty/trackme/8.txt"] }
+DT: 2024-12-11 13:18:36.228226521 UTC ID: 0 SUCCESS: success CONTENT: Achtung! ComputerAlert { ip: "127.0.0.1:7878", paths: ["/home/booty/trackme/8.txt"] }
